@@ -11,6 +11,11 @@
 #include <iomanip>
 using namespace std;
 
+void welcome (string intro) //Had some extra time so I decided to be fancy
+{
+	cout << "Thank you for using " + intro + " version 1.0" << endl << endl;
+}
+
 int main()
 {
 	//User Name
@@ -38,40 +43,37 @@ int main()
 	//Final calculation values
 	double totalAreaSod = 0.0;
 	long double totalCost = 0.0;
+	//program label
+	const string LABEL = "Property Calculator";
 
 	//Welcome Message
-	cout << "Thank you for using Property Calculator v1.0 " << endl << endl;
+	welcome(LABEL);
 	cout << "Please enter your First Name: ";
 	cin >> name;
-	system("cls");
 
 	cout << "Thank you, " << name << endl << "Please enter the length of the property in feet: ";
 	cin >> propLen;
-	system("cls");
 
 	cout << "Thank you, " << name << endl << "Please enter the width of the property in feet: ";
 	cin >> propWid;
-	system("cls");
 
 	cout << "Thank you, " << name << endl << "Please enter the length of the house in feet: ";
 	cin >> housLen;
-	system("cls");
 
 	cout << "Thank you, " << name << endl << "Please enter the width of the house in feet: ";
 	cin >> housWid;
-	system("cls");
 
 	poolDiaMax = propWid - (propWid * POOL_MAX_DIAM_PERC);
 	
 	cout << "Due to your area's zoning laws " << name << " the maximum diameter of your pool is: " << poolDiaMax << endl << endl;
 	cout << "Please enter the diameter of your pool in feet: ";
 	cin >> poolDia;
-	system("cls");
 
 	cout << "Thank you, " << name << endl << "Please enter the depth of your pool in feet: ";
 	cin >> poolDep;
 	system("cls");
 
+	// perform all necessary calculations forcing the double variables to stop at two decimal places 
 	cout.precision(2);
 	propAre = propLen * propWid;
 	poolAre = 3.1415 * (pow(poolDia/2, 2.0));
@@ -81,7 +83,9 @@ int main()
 	poolVol = poolAre * poolDep;
 	gallonsNeed = (poolVol * INCH_PER_FOOT) / INCH_PER_GAL;
 
-	cout << fixed << showpoint;
+	cout << fixed << showpoint; //force all output to stay in decimal notation
+
+	//Present all entered values and calculated results
 	cout << "Thank you " << name << endl << endl;
 	cout << "Please note all dimensions are in feet:" << endl << endl;
 	cout << "Area of the property: " << propAre << " length: " << propLen << " width: " << propWid << endl;
@@ -95,3 +99,4 @@ int main()
 
 	return 0;
 }
+
