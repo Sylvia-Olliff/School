@@ -71,19 +71,103 @@ void dispFull(string name[], string code[], string type[], double hour[], double
 {
 	int count = 0;
 	int count2 = entry;
+	int sort = 0;
+	int sort2 = 0;
+	int sequential = 0;
+	string temp1[100], temp2[100], temp3[100];
+	double temp4[100], temp5[100];
 	cout.imbue(locale(""));
 	entry = 0;
+
+	for (count = 0; count < 100; count++)
+	{
+		temp1[count] = "";
+		temp2[count] = "";
+		temp3[count] = "";
+		temp4[count] = 0.0;
+		temp5[count] = 0.0;
+	}
+
+	for (count = 0; count < 5; count++)
+	{
+		for (sort = 0; sort <= count2; sort++)
+		{
+			switch (sequential)
+			{
+			case 0:
+				if (type[sort].compare("LABOR") == 0)
+				{
+					temp1[sort2] = name[sort];
+					temp2[sort2] = code[sort];
+					temp3[sort2] = type[sort];
+					temp4[sort2] = hour[sort];
+					temp5[sort2] = charge[sort];
+					sort2++;
+				}
+				break;
+
+			case 1:
+				if (type[sort].compare("MATLS") == 0)
+				{
+					temp1[sort2] = name[sort];
+					temp2[sort2] = code[sort];
+					temp3[sort2] = type[sort];
+					temp4[sort2] = hour[sort];
+					temp5[sort2] = charge[sort];
+					sort2++;
+				}
+				break;
+
+			case 2:
+				if (type[sort].compare("INSPC") == 0)
+				{
+					temp1[sort2] = name[sort];
+					temp2[sort2] = code[sort];
+					temp3[sort2] = type[sort];
+					temp4[sort2] = hour[sort];
+					temp5[sort2] = charge[sort];
+					sort2++;
+				}
+				break;
+
+			case 3:
+				if (type[sort].compare("CONTR") == 0)
+				{
+					temp1[sort2] = name[sort];
+					temp2[sort2] = code[sort];
+					temp3[sort2] = type[sort];
+					temp4[sort2] = hour[sort];
+					temp5[sort2] = charge[sort];
+					sort2++;
+				}
+				break;
+
+			case 4:
+				if (type[sort].compare("ELECT") == 0)
+				{
+					temp1[sort2] = name[sort];
+					temp2[sort2] = code[sort];
+					temp3[sort2] = type[sort];
+					temp4[sort2] = hour[sort];
+					temp5[sort2] = charge[sort];
+					sort2++;
+				}
+				break;
+			}
+		}
+		sequential++;
+	}
 
 	cout << "\n\n" << setprecision(2) << fixed;
 	cout << setw(2) << "#" << setw(14) << "CONTR CODE" << setw(14) << "ITEM NAME" << setw(10) << "TYPE" << setw(14) << "COST/HOUR" << setw(14) << "ITEM COST" << endl;
 	for (count = 0; count < count2; count++)
 	{
 		entry++;
-		hour[count] *= 100;
-		charge[count] *= 100;
-		cout << setw(2) << entry << setw(14) << code[count] << setw(14) << name[count] << setw(10) << type[count] << setw(14);
-		if (static_cast<int>(hour[count]) > 0) { cout << put_money(hour[count]) << setw(14) << put_money(charge[count]) << endl; }
-		else { cout << " " << setw(14) << showbase << put_money(charge[count]) << endl; }
+		temp4[count] *= 100;
+		temp5[count] *= 100;
+		cout << setw(2) << entry << setw(14) << temp2[count] << setw(14) << temp1[count] << setw(10) << temp3[count] << setw(14);
+		if (static_cast<int>(temp4[count]) > 0) { cout << put_money(temp4[count]) << setw(14) << put_money(temp5[count]) << endl; }
+		else { cout << " " << setw(14) << showbase << put_money(temp5[count]) << endl; }
 	}
 	cout << endl;
 	system("pause");
