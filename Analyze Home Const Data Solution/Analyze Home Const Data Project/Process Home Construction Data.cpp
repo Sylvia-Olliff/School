@@ -67,7 +67,7 @@ void dispSing(string name, string code, string type, double hour, double charge,
 	system("pause");
 }
 
-void dispFull(string name[], string code[], string type[], double hour[], double charge[], int entry)
+void dispFull(string name[], string code[], string type[], double hour[], double charge[], int entry, double greatest, int days[])
 {
 	int count = 0;
 	int count2 = entry;
@@ -76,6 +76,7 @@ void dispFull(string name[], string code[], string type[], double hour[], double
 	int sequential = 0;
 	string temp1[100], temp2[100], temp3[100];
 	double temp4[100], temp5[100];
+	int temp6[100];
 	cout.imbue(locale(""));
 	entry = 0;
 
@@ -86,8 +87,8 @@ void dispFull(string name[], string code[], string type[], double hour[], double
 		temp3[count] = "";
 		temp4[count] = 0.0;
 		temp5[count] = 0.0;
+		temp6[count] = 0;
 	}
-
 	for (count = 0; count < 5; count++)
 	{
 		for (sort = 0; sort <= count2; sort++)
@@ -102,6 +103,7 @@ void dispFull(string name[], string code[], string type[], double hour[], double
 					temp3[sort2] = type[sort];
 					temp4[sort2] = hour[sort];
 					temp5[sort2] = charge[sort];
+					temp6[sort2] = days[sort];
 					sort2++;
 				}
 				break;
@@ -114,6 +116,7 @@ void dispFull(string name[], string code[], string type[], double hour[], double
 					temp3[sort2] = type[sort];
 					temp4[sort2] = hour[sort];
 					temp5[sort2] = charge[sort];
+					temp6[sort2] = days[sort];
 					sort2++;
 				}
 				break;
@@ -126,6 +129,7 @@ void dispFull(string name[], string code[], string type[], double hour[], double
 					temp3[sort2] = type[sort];
 					temp4[sort2] = hour[sort];
 					temp5[sort2] = charge[sort];
+					temp6[sort2] = days[sort];
 					sort2++;
 				}
 				break;
@@ -138,6 +142,7 @@ void dispFull(string name[], string code[], string type[], double hour[], double
 					temp3[sort2] = type[sort];
 					temp4[sort2] = hour[sort];
 					temp5[sort2] = charge[sort];
+					temp6[sort2] = days[sort];
 					sort2++;
 				}
 				break;
@@ -150,6 +155,7 @@ void dispFull(string name[], string code[], string type[], double hour[], double
 					temp3[sort2] = type[sort];
 					temp4[sort2] = hour[sort];
 					temp5[sort2] = charge[sort];
+					temp6[sort2] = days[sort];
 					sort2++;
 				}
 				break;
@@ -169,8 +175,31 @@ void dispFull(string name[], string code[], string type[], double hour[], double
 		if (static_cast<int>(temp4[count]) > 0) { cout << put_money(temp4[count]) << setw(14) << put_money(temp5[count]) << endl; }
 		else { cout << " " << setw(14) << showbase << put_money(temp5[count]) << endl; }
 	}
-	cout << endl;
+	cout << endl << endl << endl;
+	greatest *= 100;
+	for (count = 0; count < count2; count++)
+	{
+		if (static_cast<int>(greatest) == static_cast<int>(temp5[count]))
+		{
+			cout << "The greatest Expense was: " << temp1[count] << " Code: " << temp2[count] << endl << " Total Cost: " << put_money(temp5[count]) << " Completed on day: " << temp6[count] << endl;
+		}
+	}
 	system("pause");
+}
+
+double greatest(double charge[], int entry)
+{
+	double great = 0.0;
+	int count = 0;
+
+	for (count = 0; count < entry; count++)
+	{
+		if (static_cast<int>(great) < static_cast<int>(charge[count]))
+		{
+			great = charge[count];
+		}
+	}
+	return great;
 }
 
 int main()
@@ -242,14 +271,13 @@ int main()
 
 		//Close the data file since we are done with it
 		homedataIn.close();
-
-		dispFull(name, code, type, hourRate, totalCharge, entryCount);
+		greatChar = greatest(totalCharge, entryCount);
+		dispFull(name, code, type, hourRate, totalCharge, entryCount, greatChar, days);
 		system("cls");
-		//Display all totals next
+
 		cout << "\n\nEnd of test run.\n";
 
 	}//END IF FILE OPENED
-
 	else  //File did not open
 		cout << "The sales file did not open!\n";
 
