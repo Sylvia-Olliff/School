@@ -202,6 +202,85 @@ double greatest(double charge[], int entry)
 	return great;
 }
 
+void sectionCharges()
+{
+	ifstream dataIn;
+
+	string itemName, itemCode;
+	char itemType;
+	int hours, day;
+	double charge;
+
+	string type;
+	double chargMat = 0.0;
+	double chargIns = 0.0;
+	double chargEle = 0.0;
+	double chargLab = 0.0;
+	double chargCon = 0.0;
+	cout.imbue(locale(""));
+
+	dataIn.open("homefees.dat");
+	if (dataIn.is_open())
+	{
+		while (!dataIn.eof())
+		{
+			dataIn >> itemName
+				>> itemCode
+				>> itemType
+				>> hours
+				>> charge
+				>> day;
+			type = transType(itemType);
+			if (type.compare("LABOR") == 0)
+			{
+				chargLab += charge;
+			}
+			else if (type.compare("ELECT") == 0)
+			{
+				chargEle += charge;
+			}
+			else if (type.compare("INSPC") == 0)
+			{
+				chargIns += charge;
+			}
+			else if (type.compare("MATLS") == 0)
+			{
+				chargMat += charge;
+			}
+			else if (type.compare("CONTR") == 0)
+			{
+				chargCon += charge;
+			}
+		}
+		chargCon *= 100;
+		chargLab *= 100;
+		chargEle *= 100;
+		chargIns *= 100;
+		chargMat *= 100;
+		cout << "\n\n";
+		cout << "Totals by Type:" << endl;
+		cout << "Labor: " << setw(25) << put_money(chargLab) << endl;
+		cout << "Materials: " << setw(21) << put_money(chargMat) << endl;
+		cout << "Inspections: " << setw(16) << put_money(chargIns) << endl;
+		cout << "Contractors: " << setw(16) << put_money(chargCon) << endl;
+		cout << "Electrical: " << setw(17) << put_money(chargEle) << endl;
+	}
+	else
+	{
+		cout << "ERROR! CAN\'T OPEN FILE! " << endl;
+		system("pause");
+	}
+	dataIn.close();
+}
+
+void banner()
+{
+	cout << "*********************************************************************" << endl;
+	cout << "**       THANK YOU FOR USING HOME CONSTRUCTION COST CALC           **" << endl;
+	cout << "**     MADE BY: Joesph Olliff     LAST REVISION: 2-24-2014         **" << endl;
+	cout << "*********************************************************************" << endl;
+}
+
 int main()
 {
 	//Input file stream object to read the data file
@@ -239,9 +318,7 @@ int main()
 	homedataIn.open("homefees.dat");
 	if (homedataIn.is_open())
 	{
-		//Headers would be good to display here
-
-
+		banner();
 		//Begin the central record-processing while loop
 		count = 0;
 		while (!homedataIn.eof())
@@ -266,6 +343,7 @@ int main()
 
 			dispSing(name[count], code[count], type[count], hourRate[count], totalCharge[count], entryCount);
 			system("cls");
+			banner();
 			count++;
 		}//END OF RECORD PROCESSING WHILE LOOP
 
@@ -274,8 +352,8 @@ int main()
 		greatChar = greatest(totalCharge, entryCount);
 		dispFull(name, code, type, hourRate, totalCharge, entryCount, greatChar, days);
 		system("cls");
-
-		cout << "\n\nEnd of test run.\n";
+		banner();
+		sectionCharges();
 
 	}//END IF FILE OPENED
 	else  //File did not open
