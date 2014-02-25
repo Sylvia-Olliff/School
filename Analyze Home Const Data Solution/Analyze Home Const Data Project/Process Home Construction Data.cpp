@@ -267,6 +267,8 @@ void sectionCharges()
 		chargEle *= 100;
 		chargIns *= 100;
 		chargMat *= 100;
+
+		//Format list style display
 		cout << "\n\n";
 		cout << "Totals by Type:" << endl;
 		cout << "Labor: " << setw(25) << put_money(chargLab) << endl;
@@ -283,7 +285,7 @@ void sectionCharges()
 	dataIn.close();
 }
 
-void banner()
+void banner()// Display Header
 {
 	cout << "*********************************************************************" << endl;
 	cout << "**       THANK YOU FOR USING HOME CONSTRUCTION COST CALC           **" << endl;
