@@ -306,7 +306,7 @@ int main()
 
 	//Entry Storage Variables
 	string name[100], code[100], type[100];
-	double hourRate[100], totalCharge[100];
+	double laborCost[100], totalCharge[100];
 	int days[100];
 	double greatChar = 0.0;
 	
@@ -320,7 +320,7 @@ int main()
 		name[count] = "";
 		code[count] = "";
 		type[count] = "";
-		hourRate[count] = 0.0;
+		laborCost[count] = 0.0;
 		totalCharge[count] = 0.0;
 		days[count] = 0;
 	}
@@ -347,13 +347,13 @@ int main()
 			type[count] = transType(itemType);
 			if (hours > 0)
 			{
-				hourRate[count] = laborCalc(hours, charge);
+				laborCost[count] = laborCalc(hours, charge);
 			}
 			totalCharge[count] = charge;
 			days[count] = day;
 			entryCount++;
 
-			dispSing(name[count], code[count], type[count], hourRate[count], totalCharge[count], entryCount);
+			dispSing(name[count], code[count], type[count], laborCost[count], totalCharge[count], entryCount);
 			system("cls");
 			banner();
 			count++;
@@ -362,7 +362,7 @@ int main()
 		//Close the data file since we are done with it
 		homedataIn.close();
 		greatChar = greatest(totalCharge, entryCount);
-		dispFull(name, code, type, hourRate, totalCharge, entryCount, greatChar, days);
+		dispFull(name, code, type, laborCost, totalCharge, entryCount, greatChar, days);
 		system("cls");
 		banner();
 		sectionCharges();
