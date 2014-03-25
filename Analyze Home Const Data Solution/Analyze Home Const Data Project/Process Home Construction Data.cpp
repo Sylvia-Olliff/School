@@ -4,13 +4,31 @@
 
 #include <iostream>
 #include <fstream>
+#include <istream>
 #include <string>
 #include <iomanip>
 #include <locale>
 #include <sstream>
-using namespace std;
+#include <direct.h>
 
-//Function prototypes here
+using namespace std;
+const int SIZE = 1000;
+int entryCount = 0;
+int numValid = 0;
+
+struct list
+{
+	string name, code, type;
+	double laborCost, totalCharge;
+	int day;
+	bool isValid = true;
+	char typeCode = ' ';
+}entry;
+
+list entries[SIZE];
+list entriesTemp;
+list entriesAnnoy[SIZE];
+
 string transType(char trans) //translate Item Codes
 {
 	string translation = "";
@@ -37,7 +55,7 @@ string transType(char trans) //translate Item Codes
 			break;
 
 		default:
-			translation = "ERROR";
+			translation = "UNKNW";
 			break;
 	}
 
@@ -52,285 +70,19 @@ double laborCalc(int hours, double charge) //Calculate hourly rate
 	return result;
 }
 
-//Display a single entry from the file in the order in which it was read
-void dispSing(string name, string code, string type, double hour, double charge, int entry) 
+void readInitial() // Initial reading of homefees-b
 {
-	cout.imbue(locale(""));
-
-	hour *= 100;
-	charge *= 100;
-
-	cout << "\n\n" << setprecision(2) << fixed;
-	cout << setw(2) << "#" << setw(14) << "CONTR CODE" << setw(14) << "ITEM NAME" << setw(10) << "TYPE" << setw(14) << "COST/HOUR" << setw(14) << "ITEM COST" << endl;
-	cout << setw(2) << entry << setw(14) << code << setw(14) << name << setw(10) << type << setw(14);
-	if (static_cast<int>(hour) > 0) { cout << put_money(hour) << setw(14) << put_money(charge) << endl << endl; }
-	else { cout << " " << setw(14) << showbase << put_money(charge) << endl << endl; }
-	system("pause");
-}
-
-//Display the full report, properly formated and sorted based off of type
-void dispFull(string name[], string code[], string type[], double hour[], double charge[], int entry, double greatest, int days[])
-{
-	int count = 0;
-	int count2 = entry;
-	int sort = 0;
-	int sort2 = 0;
-	int sequential = 0;
-	string temp1[100], temp2[100], temp3[100];
-	double temp4[100], temp5[100];
-	int temp6[100];
-	cout.imbue(locale(""));
-	entry = 0;
-
-	for (count = 0; count < 100; count++) //initialize
-	{
-		temp1[count] = "";
-		temp2[count] = "";
-		temp3[count] = "";
-		temp4[count] = 0.0;
-		temp5[count] = 0.0;
-		temp6[count] = 0;
-	}
-	for (count = 0; count < 5; count++) //structured sort
-	{
-		for (sort = 0; sort <= count2; sort++)
-		{
-			switch (sequential)
-			{
-			case 0:
-				if (type[sort].compare("CONTR") == 0)
-				{
-					temp1[sort2] = name[sort];
-					temp2[sort2] = code[sort];
-					temp3[sort2] = type[sort];
-					temp4[sort2] = hour[sort];
-					temp5[sort2] = charge[sort];
-					temp6[sort2] = days[sort];
-					sort2++;
-				}
-				break;
-
-			case 1:
-				if (type[sort].compare("ELECT") == 0)
-				{
-					temp1[sort2] = name[sort];
-					temp2[sort2] = code[sort];
-					temp3[sort2] = type[sort];
-					temp4[sort2] = hour[sort];
-					temp5[sort2] = charge[sort];
-					temp6[sort2] = days[sort];
-					sort2++;
-				}
-				break;
-
-			case 2:
-				if (type[sort].compare("INSPC") == 0)
-				{
-					temp1[sort2] = name[sort];
-					temp2[sort2] = code[sort];
-					temp3[sort2] = type[sort];
-					temp4[sort2] = hour[sort];
-					temp5[sort2] = charge[sort];
-					temp6[sort2] = days[sort];
-					sort2++;
-				}
-				break;
-
-			case 3:
-				if (type[sort].compare("LABOR") == 0)
-				{
-					temp1[sort2] = name[sort];
-					temp2[sort2] = code[sort];
-					temp3[sort2] = type[sort];
-					temp4[sort2] = hour[sort];
-					temp5[sort2] = charge[sort];
-					temp6[sort2] = days[sort];
-					sort2++;
-				}
-				break;
-
-			case 4:
-				if (type[sort].compare("MATLS") == 0)
-				{
-					temp1[sort2] = name[sort];
-					temp2[sort2] = code[sort];
-					temp3[sort2] = type[sort];
-					temp4[sort2] = hour[sort];
-					temp5[sort2] = charge[sort];
-					temp6[sort2] = days[sort];
-					sort2++;
-				}
-				break;
-			}
-		}
-		sequential++;
-	}
-
-	//Full formated display using put_money
-	cout << "\n\n" << setprecision(2) << fixed;
-	cout << setw(2) << "#" << setw(14) << "CONTR CODE" << setw(14) << "ITEM NAME" << setw(10) << "TYPE" << setw(14) << "COST/HOUR" << setw(14) << "ITEM COST" << endl;
-	for (count = 0; count < count2; count++)
-	{
-		entry++;
-		temp4[count] *= 100; //needed for the use of put_money
-		temp5[count] *= 100;
-		cout << setw(2) << entry << setw(14) << temp2[count] << setw(14) << temp1[count] << setw(10) << temp3[count] << setw(14);
-		if (static_cast<int>(temp4[count]) > 0) { cout << put_money(temp4[count]) << setw(14) << put_money(temp5[count]) << endl; }
-		else { cout << " " << setw(14) << showbase << put_money(temp5[count]) << endl; }
-	}
-	cout << endl << endl << endl;
-	greatest *= 100;
-	//Make sure the correct "greatest" displays after having been moved in the sorting
-	for (count = 0; count < count2; count++) 
-	{
-		if (static_cast<int>(greatest) == static_cast<int>(temp5[count]))
-		{
-			cout << "The greatest Expense was: " << temp1[count] << " Code: " << temp2[count] << endl << " Total Cost: " << put_money(temp5[count]) << " Completed on day: " << temp6[count] << endl;
-		}
-	}
-	system("pause");
-}
-
-//Determine the greatest single expense
-double greatest(double charge[], int entry)
-{
-	double great = 0.0;
-	int count = 0;
-
-	for (count = 0; count < entry; count++)
-	{
-		if (static_cast<int>(great) < static_cast<int>(charge[count]))
-		{
-			great = charge[count];
-		}
-	}
-	return great;
-}
-
-//Extra credit function. Self contained process for determining the total expenses for each expense type
-void sectionCharges()
-{
-	//File input reader
-	ifstream dataIn;
-
-	//Entry data points
-	string itemName, itemCode;
-	char itemType;
-	int hours, day;
-	double charge;
-
-	//Accumulation variables and tools
-	string type;
-	double chargMat = 0.0;
-	double chargIns = 0.0;
-	double chargEle = 0.0;
-	double chargLab = 0.0;
-	double chargCon = 0.0;
-	cout.imbue(locale(""));
-
-	dataIn.open("homefees.dat");
-	if (dataIn.is_open()) // Verify file was opened
-	{
-		while (!dataIn.eof()) //Continue to read until the end of file is reached
-		{
-			dataIn >> itemName
-				>> itemCode
-				>> itemType
-				>> hours
-				>> charge
-				>> day;
-
-			type = transType(itemType);
-			if (type.compare("LABOR") == 0)
-			{
-				chargLab += charge;
-			}
-			else if (type.compare("ELECT") == 0)
-			{
-				chargEle += charge;
-			}
-			else if (type.compare("INSPC") == 0)
-			{
-				chargIns += charge;
-			}
-			else if (type.compare("MATLS") == 0)
-			{
-				chargMat += charge;
-			}
-			else if (type.compare("CONTR") == 0)
-			{
-				chargCon += charge;
-			}
-		}
-		chargCon *= 100;
-		chargLab *= 100;
-		chargEle *= 100;
-		chargIns *= 100;
-		chargMat *= 100;
-
-		//Format list style display
-		cout << "\n\n";
-		cout << "Totals by Type:" << endl;
-		cout << "Labor: " << setw(25) << put_money(chargLab) << endl;
-		cout << "Materials: " << setw(21) << put_money(chargMat) << endl;
-		cout << "Inspections: " << setw(16) << put_money(chargIns) << endl;
-		cout << "Contractors: " << setw(16) << put_money(chargCon) << endl;
-		cout << "Electrical: " << setw(17) << put_money(chargEle) << endl;
-	}
-	else
-	{
-		cout << "ERROR! CAN\'T OPEN FILE! " << endl;
-		system("pause");
-	}
-	dataIn.close();
-}
-
-void banner()// Display Header
-{
-	cout << "*********************************************************************" << endl;
-	cout << "**       THANK YOU FOR USING HOME CONSTRUCTION COST CALC           **" << endl;
-	cout << "**     MADE BY: Joesph Olliff     LAST REVISION: 2-24-2014         **" << endl;
-	cout << "*********************************************************************" << endl;
-}
-
-int main()
-{
-	//Input file stream object to read the data file
 	ifstream homedataIn;
 
-	//Variables for the incoming fields
+	int count = 0;
 	string itemName, itemCode;
 	char itemType;
 	int hours, day;
 	double charge;
 
-	//Entry Storage Variables
-	string name[100], code[100], type[100];
-	double laborCost[100], totalCharge[100];
-	int days[100];
-	double greatChar = 0.0;
-	
-	//Tools
-	int count = 0;
-	int entryCount = 0;
-
-	//Initialize Arrays
-	for (count = 0; count < 100; count++)
-	{
-		name[count] = "";
-		code[count] = "";
-		type[count] = "";
-		laborCost[count] = 0.0;
-		totalCharge[count] = 0.0;
-		days[count] = 0;
-	}
-	
-
-	//Open the data file
-	homedataIn.open("homefees.dat");
+	homedataIn.open("homefees-b.dat");
 	if (homedataIn.is_open())
 	{
-		banner();
 		//Begin the central record-processing while loop
 		count = 0;
 		while (!homedataIn.eof())
@@ -342,36 +94,297 @@ int main()
 				>> hours
 				>> charge
 				>> day;
-			name[count] = itemName;
-			code[count] = itemCode;
-			type[count] = transType(itemType);
+			entries[count].name = itemName;
+			entries[count].code = itemCode;
+			entries[count].type = transType(itemType);
+			entries[count].typeCode = itemType;
+			if (entries[count].type.compare("UNKNW"))
+			{
+				entries[count].isValid = false;
+			}
 			if (hours > 0)
 			{
-				laborCost[count] = laborCalc(hours, charge);
+				entries[count].laborCost = laborCalc(hours, charge);
 			}
-			totalCharge[count] = charge;
-			days[count] = day;
+			entries[count].totalCharge = charge;
+			entries[count].day = day;
 			entryCount++;
-
-			dispSing(name[count], code[count], type[count], laborCost[count], totalCharge[count], entryCount);
-			system("cls");
-			banner();
 			count++;
 		}//END OF RECORD PROCESSING WHILE LOOP
 
 		//Close the data file since we are done with it
 		homedataIn.close();
-		greatChar = greatest(totalCharge, entryCount);
-		dispFull(name, code, type, laborCost, totalCharge, entryCount, greatChar, days);
-		system("cls");
-		banner();
-		sectionCharges();
+	}
+	else
+	{
+		cout << "Error opening file... aborting..." << endl;
+		system("pause");
+	}
+}
 
-	}//END IF FILE OPENED
-	else  //File did not open
-		cout << "The sales file did not open!\n";
+void generateValidNum()
+{
+	int count = 0;
 
-	cout << "\n\n";
+	for (count = 0; count < entryCount; count++)
+	{
+		if (entries[count].isValid)
+		{
+			numValid++;
+		}
+	}
+}
+
+void sortDay()
+{
+	//tools
+	int sub = 0;
+	int maxSub = entryCount - 1;
+	int lastSwap = 0;
+	bool swap = true;
+
+	//storing the sort
+	ofstream sorted;
+
+	//Bubble sort
+	while (swap)
+	{
+		swap = false;
+
+		sub = 0;
+
+		while (sub < maxSub)
+		{
+			if (entries[sub].day > entries[sub + 1].day)
+			{
+				entriesTemp.day = entries[sub].day;
+				entriesTemp.code = entries[sub].code;
+				entriesTemp.name = entries[sub].name;
+				entriesTemp.type = entries[sub].type;
+				entriesTemp.isValid = entries[sub].isValid;
+				entriesTemp.laborCost = entries[sub].laborCost;
+				entriesTemp.totalCharge = entries[sub].totalCharge;
+				entriesTemp.typeCode = entries[sub].typeCode;
+
+				entries[sub].day = entries[sub + 1].day;
+				entries[sub].code = entries[sub + 1].code;
+				entries[sub].name = entries[sub + 1].name;
+				entries[sub].type = entries[sub + 1].type;
+				entries[sub].isValid = entries[sub + 1].isValid;
+				entries[sub].laborCost = entries[sub + 1].laborCost;
+				entries[sub].totalCharge = entries[sub + 1].totalCharge;
+				entries[sub].typeCode = entries[sub + 1].typeCode;
+
+				entries[sub + 1].day = entriesTemp.day;
+				entries[sub + 1].code = entriesTemp.code;
+				entries[sub + 1].name = entriesTemp.name;
+				entries[sub + 1].type = entriesTemp.type;
+				entries[sub + 1].isValid = entriesTemp.isValid;
+				entries[sub + 1].laborCost = entriesTemp.laborCost;
+				entries[sub + 1].totalCharge = entriesTemp.totalCharge;
+				entries[sub + 1].typeCode = entriesTemp.typeCode;
+
+				swap = true;
+				lastSwap = sub;
+			}
+			sub++;
+		}
+		maxSub = lastSwap;
+	}
+
+	sorted.open("Sorted.dat", ios::out);
+
+	if (sorted.is_open())
+	{
+		for (int count = 0; count < entryCount; count++)
+		{
+			sorted << entries[count].day << " " << entries[count].name << " " << entries[count].code << " "
+				<< entries[count].typeCode << " " << entries[count].laborCost << " " << entries[count].totalCharge << " "
+				<< endl;
+		}
+	}
+	else
+	{
+		cout << "Error creating file \"Sorted.dat\"" << endl;
+	}
+
+	sorted.close();
+}
+
+void createAnnoying()
+{
+	ofstream annoy;
+
+	int count = 0;
+	int tracker = 0;
+
+	for (count = 0; count < entryCount; count++)
+	{
+		if (!entries[count].isValid)
+		{
+			entriesAnnoy[count].day = entries[count].day;
+			entriesAnnoy[count].code = entries[count].code;
+			entriesAnnoy[count].isValid = entries[count].isValid;
+			entriesAnnoy[count].laborCost = entries[count].laborCost;
+			entriesAnnoy[count].name = entries[count].name;
+			entriesAnnoy[count].totalCharge = entries[count].totalCharge;
+			entriesAnnoy[count].type = entries[count].type;
+			entriesAnnoy[count].typeCode = entries[count].typeCode;
+
+			tracker++;
+		}
+	}
+
+	annoy.open("Annoying Programmer.dat", ios::out);
+
+	if (annoy.is_open())
+	{
+		annoy << entryCount - numValid << endl;
+
+		//input invalid entries sorted by day
+		for (count = 0; count < tracker; count++)
+		{
+			if (!entriesAnnoy[count].isValid)
+			{
+				annoy << entriesAnnoy[count].day << " " << entriesAnnoy[count].code << " " << entriesAnnoy[count].name << " " << entriesAnnoy[count].typeCode
+					<< " " << entriesAnnoy[count].laborCost << " " << entriesAnnoy[count].totalCharge << endl;
+			}
+		}
+		annoy << numValid << endl;
+
+		//input valid entries sorted by day
+		for (count = 0; count < entryCount; count++)
+		{
+			if (entries[count].isValid)
+			{
+				annoy << entries[count].day << " " << entries[count].code << " " << entries[count].name << " " << entries[count].typeCode
+					<< " " << entries[count].laborCost << " " << entries[count].totalCharge << endl;
+			}
+		}
+	}
+	else
+	{
+		cout << "Error creating file \"Annoying Programmer.dat\"" << endl;
+	}
+
+	annoy.close();
+}
+
+void createCSV()
+{
+	ofstream csv;
+	int count = 0;
+
+	csv.open("SpreadEm.csv", ios::out);
+
+	if (csv.is_open())
+	{
+		csv << "Day,Product,Contractor ID,Type,Hourly,Total Charge," << endl;
+		for (count = 0; count < entryCount; count++)
+		{
+			csv << entries[count].day << "," << entries[count].name << "," << entries[count].code << ","
+				<< entries[count].type << "," << entries[count].laborCost << "," << entries[count].totalCharge << "," 
+				<< endl;
+		}
+	}
+	else
+	{
+		cout << "Error creating file \"SpreadEm.csv\"" << endl;
+	}
+	csv.close();
+}
+
+void createWeekSumm()
+{
+	ofstream summ;
+
+	int count = 0;
+	int weekTrack = 0;
+	int weekNum = 1;
+	double totLab = 0.0, 
+		totMat = 0.0, 
+		totIns = 0.0, 
+		totCon = 0.0, 
+		totEle = 0.0, 
+		totInv = 0.0, 
+		totAll = 0.0;
+	
+	for (count = 0; count < entryCount; count++)
+	{
+		if (weekTrack < 8)
+		{
+			weekTrack++;
+			if (toupper(entries[count].typeCode) == 'L')
+			{
+				totLab += entries[count].totalCharge;
+			}
+			else if (toupper(entries[count].typeCode) == 'M')
+			{
+				totMat += entries[count].totalCharge;
+			}
+			else if (toupper(entries[count].typeCode) == 'I')
+			{
+				totIns += entries[count].totalCharge;
+			}
+			else if (toupper(entries[count].typeCode) == 'C')
+			{
+				totCon += entries[count].totalCharge;
+			}
+			else if (toupper(entries[count].typeCode) == 'E')
+			{
+				totEle += entries[count].totalCharge;
+			}
+			else
+			{
+				totInv += entries[count].totalCharge;
+			}
+
+		}
+		else
+		{
+			weekTrack = 0;
+			totAll = totCon + totEle + totIns + totInv + totLab + totMat;
+
+			summ.open("Weekly Summary.txt", ios::app);
+
+			if (summ.is_open())
+			{
+				summ << "Week: " << weekNum << endl;
+				weekNum++;
+				summ << setprecision(2) << fixed;
+				summ << setw(10) << "LABOR: " << setw(23) << totLab << endl;
+				summ << setw(10) << "MATLS: " << setw(24) << totMat << endl;
+				summ << setw(10) << "INSPC: " << setw(25) << totIns << endl;
+				summ << setw(10) << "CONTR: " << setw(24) << totCon << endl;
+				summ << setw(10) << "ELECT: " << setw(24) << totEle << endl;
+				summ << setw(10) << "UNKNW: " << setw(24) << totInv << endl << endl;
+				summ << setw(10) << "Total: " << setw(24) << totLab << endl << endl;
+			}
+			else
+			{
+				cout << "Error creating file \"Weekly Summary.txt\"" << endl;
+			}
+			summ.close();
+			totAll, totCon, totEle, totIns, totInv, totLab, totMat = 0.0;
+		}
+
+	}
+}
+
+int main()
+{
+	_mkdir("\Output");
+	
+	readInitial();
+
+	_chdir("\Output");
+
+	generateValidNum();
+	createCSV();
+	sortDay();
+	createWeekSumm();
+	createAnnoying();
+
 	system("pause");
 	return 0;
 }//END MAIN
