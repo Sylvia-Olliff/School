@@ -12,25 +12,33 @@
 
 using namespace std;
 
-int getProd(ifstream&);
-int getPric(ifstream&);
+int **getProd(ifstream&, int[][NUM_PROD]);
+int getPric(ifstream&, int array);
 int numEntry(ifstream&);
 ifstream& GotoLine(ifstream, unsigned int);
 
-const int numPlants = 1;
-const int typeProd = 3;
+const int NUM_PLANTS = 3; //Static number of Plants (must change when adding Plants!)
+const int NUM_PROD = 3; //Static number of Products (must change when adding Products!)
+const int NUM_COMP = 5; //Static number of Components (Due to intrensic nature of the components and there use, leave this unchanged)
 
 int main()
 {
+	//File reading object
 	ifstream fileRead;
 
-	string plaName[50];
+	//Storage and calculation arrays
+	int plants[NUM_PLANTS][NUM_PROD];
+	int components[NUM_COMP][NUM_PROD];
+	int costs[NUM_PLANTS][NUM_PROD];
+
+	//storage tools
 	string fileName;
 	int count = 0;
-	int plaNum = 0;
+	int count2 = 0;
+	int plaNum = 0; //used in setting the pointer in the file (leave unchanged when adding additional Plants)
 	
 	cout << "Please enter the name of the file (case sensitive, include file extension): "; //Get File name
-	cin >> fileName;
+	cin >> fileName; 
 
 	if (fileName.empty()) //Verify that the user entered something
 	{
@@ -42,7 +50,21 @@ int main()
 		fileRead.open(fileName);
 		if (fileRead.is_open()) //Check that the file was found and opened
 		{
-			plaNum = numEntry(fileRead);
+			plaNum = numEntry(fileRead); //Find the blank line indicating the end of plant info
+
+			fileRead.close();
+			fileRead.open(fileName); // close and reopen the file to reset the pointer
+
+			getProd(fileRead, plants);
+			for (count = 0; count < NUM_PLANTS; count++)
+			{
+				for (count2 = 0; count2 < NUM_PROD; count++)
+				{
+					cout << plants[count][count2] << endl;
+				}
+			}
+			
+			system("pause");
 		}
 		else
 		{
@@ -76,4 +98,18 @@ int numEntry(ifstream& file) //Determines the number of plants in the file
 		}
 	}
 	return entry;
+}
+
+int getProd(ifstream& file, int plants[][NUM_PROD])
+{
+	int count, count2;
+
+	for (count = 0; count < NUM_PLANTS; count++)
+	{
+		for (count2 = 0; count2 < NUM_PROD; count++)
+		{
+			plants[NUM_PLANTS][NUM_PROD] = 0;
+		}
+	}
+	return plants;
 }
