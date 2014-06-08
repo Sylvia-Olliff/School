@@ -11,7 +11,7 @@ using namespace std;
 
 //prototypes
 void welcome(); //Program banner
-void menuRec(); //Menu for Recurring Customer
+void menuRec(SavingsAccount &); //Menu for Recurring Customer
 void menuNew(); //Menu for New Customer
 void menuDeposit(SavingsAccount &); //Menu for making a deposit (performs the action as well)
 void menuWithdraw(SavingsAccount &); //Menu for making a withdrawal (performs the action as well)
@@ -66,7 +66,7 @@ int main()
 				{
 					system("cls");
 					welcome();
-					menuRec();
+					menuRec(accountOne);
 					cin >> recSelection;
 
 					switch (recSelection) //Decision logic for Deposits, Withdrawals, and finally exiting for a recuring customer
@@ -137,8 +137,9 @@ void welcome()
 	cout << "Welcome to BankPro 1.0" << endl << endl;
 }
 
-void menuRec()
+void menuRec(SavingsAccount &activeAcc)
 {
+	cout << "Current Balance: " << activeAcc.getBalance() << endl << endl;
 	cout << "Please make a selection from the following menu: " << endl;
 	cout << "1. Make a Deposit" << endl;
 	cout << "2. Make a Withdrawal" << endl;
@@ -200,14 +201,14 @@ void prediction(SavingsAccount activeAcc)
 			cout << "  " << count+1 << "  " << setw(10) << "$" << activeAcc.getBalance() << setw(10) << "$" << (activeAcc.getBalance() * activeAcc.getInterestRate()) << setw(10)
 				<< "$" << (activeAcc.getBalance() * activeAcc.getInterestRate()) + activeAcc.getBalance() << endl;
 			cout << "-------------------------------------------------------------" << endl; //asthetics
-			activeAcc.deposit((activeAcc.getBalance() * activeAcc.getInterestRate()) + activeAcc.getBalance());
+			activeAcc.deposit(activeAcc.getBalance() * activeAcc.getInterestRate());
 		}
 		else // I hate using setw() never seems to work right for me without wierd code like this...
 		{
 			cout << "  " << count+1 << "  " << setw(9) << "$" << activeAcc.getBalance() << setw(10) << "$" << (activeAcc.getBalance() * activeAcc.getInterestRate()) << setw(10)
 				<< "$" << (activeAcc.getBalance() * activeAcc.getInterestRate()) + activeAcc.getBalance() << endl;
 			cout << "-------------------------------------------------------------" << endl; //asthetics
-			activeAcc.deposit((activeAcc.getBalance() * activeAcc.getInterestRate()) + activeAcc.getBalance());
+			activeAcc.deposit(activeAcc.getBalance() * activeAcc.getInterestRate());
 		}
 	}
 }
