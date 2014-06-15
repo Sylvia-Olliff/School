@@ -1,6 +1,7 @@
 /*File Name: Elevator.h
 Programmer: Joesph Olliff
-Purpose: The Elevator Class for use with the Elevator Controller program */
+Purpose: The Elevator Class simulates a physical elevator with a configurable floor range, 
+		capacity, and contains safe movement and boarding methods */
 
 #include <iostream>
 
@@ -79,12 +80,12 @@ void Elevator::loadPassengers(int passBoarding)
 	else
 	{
 		int overflow = 0;
-		do
+		do //determines how many passengers couldn't get on
 		{
 			passBoarding--;
 			overflow++;
 		} while (passBoarding + passengers != capacity);
-		passengers = capacity;
+		passengers = capacity; // extra passengers never get on the Elevator insuring that it is never overloaded.... not even for a nanosecond...
 		cout << passBoarding << " Passengers boarded the Elevator for a total of " << passengers << " Passengers" << endl; 
 		cout << overflow << " Passengers were unable to board, the Elevator is at Capacity!" << endl;
 	}
@@ -99,7 +100,7 @@ void Elevator::offloadPassengers(int passLeaving)
 	}
 	else
 	{
-		passLeaving = passengers;
+		passLeaving = passengers; // ensures that passengers is never assigned a negative value
 		passengers = 0;
 		cout << passLeaving << " Passengers left the elevator leaving " << passengers << " Passengers behind" << endl;
 	}

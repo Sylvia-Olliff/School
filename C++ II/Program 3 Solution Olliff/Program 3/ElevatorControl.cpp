@@ -3,7 +3,6 @@ Programmer: Joesph Olliff
 Purpose: A control program simulating the motions of an elevator */
 
 #include <iostream>
-#include <iomanip>
 
 #include "Elevator.h"
 
@@ -13,6 +12,8 @@ int main()
 {
 	Elevator elevatorOne(18,1,99,1);
 	
+
+	//Simulates a test run covering normal functionality as well as stress test for error checking
 	elevatorOne.loadPassengers(5);
 	system("pause");
 	system("cls");
@@ -33,5 +34,7 @@ int main()
 	system("cls");
 	elevatorOne.offloadPassengers(3);
 	system("pause");
-
+	system("cls");
+	elevatorOne.changeFloors(-5);
+	system("pause");
 }
