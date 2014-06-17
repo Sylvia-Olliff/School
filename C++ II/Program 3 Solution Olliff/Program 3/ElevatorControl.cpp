@@ -16,25 +16,36 @@ int main()
 	//Simulates a test run covering normal functionality as well as stress test for error checking
 	elevatorOne.loadPassengers(5);
 	system("pause");
-	system("cls");
 	elevatorOne.changeFloors(60);
 	system("pause");
-	system("cls");
 	elevatorOne.offloadPassengers(7);
 	system("pause");
-	system("cls");
 	elevatorOne.changeFloors(1000);
 	system("pause");
-	system("cls");
 	elevatorOne.loadPassengers(20);
 	system("pause");
-	system("cls");
 	elevatorOne.changeFloors(35);
 	system("pause");
-	system("cls");
 	elevatorOne.offloadPassengers(3);
 	system("pause");
-	system("cls");
 	elevatorOne.changeFloors(-5);
 	system("pause");
+	elevatorOne.changeFloors(78);
+	system("pause");
+	elevatorOne.offloadPassengers(6);
+	system("pause");
+	elevatorOne.changeFloors(98);
+	system("pause");
+	elevatorOne.loadPassengers(4);
+	system("pause");
+	elevatorOne.changeFloors(21);
+	system("pause");
+	elevatorOne.offloadPassengers(7);
+	system("pause");
+	elevatorOne.changeFloors(1);
+	system("pause");
+	elevatorOne.loadPassengers(10);
+	system("pause");
+
+	return 0;
 }

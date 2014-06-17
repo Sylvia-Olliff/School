@@ -80,11 +80,8 @@ void Elevator::loadPassengers(int passBoarding)
 	else
 	{
 		int overflow = 0;
-		do //determines how many passengers couldn't get on
-		{
-			passBoarding--;
-			overflow++;
-		} while (passBoarding + passengers != capacity);
+		overflow = (passBoarding + passengers) - capacity;
+		passBoarding -= overflow;
 		passengers = capacity; // extra passengers never get on the Elevator insuring that it is never overloaded.... not even for a nanosecond...
 		cout << passBoarding << " Passengers boarded the Elevator for a total of " << passengers << " Passengers" << endl; 
 		cout << overflow << " Passengers were unable to board, the Elevator is at Capacity!" << endl;
