@@ -13,12 +13,7 @@ int main()
 
 	cruiser.loadPassengers();//Load initial passengers from Home port
 
-	//Simulate a series of runs
-	cruiser.changePort(18);
-	cruiser.changePort(15);
 	cruiser.changePort(20);
-	cruiser.changePort(4);
-	cruiser.changePort(35);
 
 	system("pause");
 	return 0;

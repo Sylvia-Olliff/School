@@ -119,7 +119,7 @@ void FerryBoat::changePort(int destinationPort)
 	if (destinationPort <= numPorts && destinationPort > 0 && destinationPort != currentPort)
 	{
 		destPort = destinationPort;
-		cout << "Departing port " << currentPort << " heading for port " << destPort << endl;
+		cout << "Departing port " << currentPort << " heading for port " << currentPort+1 << endl;
 		delayed = delayChance();
 		while (destPort - 1 != currentPort)//Heading out to destination stopping at each port
 		{
@@ -136,7 +136,7 @@ void FerryBoat::changePort(int destinationPort)
 				loadPassengers();
 			}
 			delayed = delayChance();
-			cout << "Departing port " << currentPort << " heading for port " << destPort << endl;
+			cout << "Departing port " << currentPort << " heading for port " << currentPort+1 << endl;
 		}
 		currentPort++;
 		cout << "Arriving at Destination port " << currentPort << endl;
@@ -144,31 +144,11 @@ void FerryBoat::changePort(int destinationPort)
 		loadPassengers();
 
 		cout << "Returning to Home Port\n";
+		cout << "Arriving at Home Port\n";
+		currentPort = 1;
 		destPort = 1;
-
-		cout << "Departing port " << currentPort << " heading for port " << destPort << endl;
-		delayed = delayChance();
-		while (destPort + 1 != currentPort) //Return back to home port
-		{
-			currentPort--;
-			cout << "Stopping at port " << currentPort << endl;
-			if (delayed)
-			{
-				offloadPassengers();
-				loadPassengers(delayed);
-			}
-			else
-			{
-				offloadPassengers();
-				loadPassengers();
-			}
-			delayed = delayChance();
-			cout << "Departing port " << currentPort << " heading for port " << destPort << endl;
-		}
-		currentPort--;
-		cout << "Arriving at Home port " << currentPort << endl;
 		offloadPassengers();
-		loadPassengers();
+		
 	}
 	else
 	{
