@@ -26,8 +26,7 @@ public:
 	int getBoardingHome();
 	int getBoardingDest();
 	void loadPassengers();
-	void loadPassengers(bool);
 	void offloadPassengers();
 	void changePort();
-	bool missChance(int);
+	int missChance();
 };

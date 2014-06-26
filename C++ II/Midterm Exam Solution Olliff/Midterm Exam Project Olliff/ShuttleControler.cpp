@@ -20,6 +20,25 @@ int main()
 	cin >> passDest;
 
 	ShuttleBoat cruiser("USS Shimmy", 1, destination, 125, passHome, passDest);
+	int countHome = cruiser.getBoardingHome();
+	int countDest = cruiser.getBoardingDest();
 
+	while (countHome != 0 && countDest != 0)
+	{
+		cruiser.loadPassengers();
+		cruiser.changePort();
+		cruiser.offloadPassengers();
+		countHome = cruiser.getBoardingHome();
+		countDest = cruiser.getBoardingDest();
+	}
+
+	int temp = cruiser.getCurrentPort();
+	if (temp != 1)
+	{
+		cruiser.changePort();
+	}
+
+	cout << "All passengers ferried to their destinations..." << endl;
+	system("pause");
 	return 0;
 }
