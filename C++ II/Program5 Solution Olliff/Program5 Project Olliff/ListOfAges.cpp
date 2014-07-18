@@ -11,13 +11,13 @@ using namespace std;
 
 ListOfAges::ListOfAges(string file)
 {
-	average = 0;
+	average = 0.0;
 	entries = 0;
 	belowAverage = 0;
 	fileName = file;
 }
 
-int ListOfAges::getAverage()
+double ListOfAges::getAverage()
 {
 	return average;
 }
@@ -67,10 +67,10 @@ void ListOfAges::displayAges()
 	}
 }
 
-int ListOfAges::calcAverageAge()
+double ListOfAges::calcAverageAge()
 {
 	int count = 0;
-	int total = 0;
+	double total = 0.0;
 
 	for (count = 0; count < entries; count++)
 	{

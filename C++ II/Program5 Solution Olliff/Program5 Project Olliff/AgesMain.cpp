@@ -10,7 +10,7 @@ using namespace std;
 int main()
 {
 	string file = "";
-	int average = 0;
+	double average = 0.0;
 	int below = 0;
 	double stdDev = 0.0;
 

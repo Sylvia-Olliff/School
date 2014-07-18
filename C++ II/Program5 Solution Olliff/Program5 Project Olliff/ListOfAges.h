@@ -9,20 +9,20 @@ class ListOfAges {
 
 private:
 	int ages[200];
-	int average;
+	double average;
 	int entries;
 	int belowAverage;
 	string fileName;
 
 public:
 	ListOfAges(string);
-	int getAverage();
+	double getAverage();
 	int getEntries();
 	int getBelowAverage();
 	string getFileName();
 	void loadAges();
 	void displayAges();
-	int calcAverageAge();
+	double calcAverageAge();
 	int countBelowAverage();
 	double calcStandardDeviation();
 };
