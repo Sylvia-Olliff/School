@@ -86,7 +86,7 @@ void StoredOrders::displayAllOrders()
 	int count = 0;
 
 	f.open(file);
-	if (f.is_open)
+	if (f.is_open())
 	{
 		while (!f.eof())
 		{
@@ -117,7 +117,7 @@ double StoredOrders::calcTotalCostOfOrders()
 	int count = 0;
 
 	f.open(file);
-	if (f.is_open)
+	if (f.is_open())
 	{
 		while (!f.eof())
 		{
